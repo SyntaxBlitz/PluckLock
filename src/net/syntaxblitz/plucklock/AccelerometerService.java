@@ -1,5 +1,6 @@
 package net.syntaxblitz.plucklock;
 
+import android.app.KeyguardManager;
 import android.app.Service;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
@@ -45,9 +46,11 @@ public class AccelerometerService extends Service {
 				double z = Math.abs(event.values[2] / 9.81);
 				double sum = x + y + z;
 				if (sum > threshold && threshold > .15) {
-					Log.i("PluckLock", "exceeded threshold " + Math.random());
-					DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-					dpm.lockNow();
+					KeyguardManager keyguardManager = (KeyguardManager) getBaseContext().getSystemService(Context.KEYGUARD_SERVICE);
+					if (!keyguardManager.inKeyguardRestrictedInputMode()) {
+						DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+						dpm.lockNow();
+					}
 				}
 			}
 		}, sensor, SensorManager.SENSOR_DELAY_NORMAL);
