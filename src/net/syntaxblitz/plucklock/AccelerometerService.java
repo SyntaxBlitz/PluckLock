@@ -44,7 +44,7 @@ public class AccelerometerService extends Service {
 				double y = Math.abs(event.values[1] / 9.81);
 				double z = Math.abs(event.values[2] / 9.81);
 				double sum = x + y + z;
-				if (sum > threshold) {
+				if (sum > threshold && threshold > .15) {
 					Log.i("PluckLock", "exceeded threshold " + Math.random());
 					DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
 					dpm.lockNow();
