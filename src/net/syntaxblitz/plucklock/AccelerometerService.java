@@ -50,7 +50,7 @@ public class AccelerometerService extends Service {
 					}
 				}
 			}
-		}, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+		}, sensor, SensorManager.SENSOR_DELAY_GAME);
 
 		/*
 		 * runningThread = new Thread(new Runnable() {
