@@ -4,7 +4,9 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
+import android.text.InputType;
 
 public class SettingsActivity extends PreferenceActivity {
 
@@ -30,6 +32,7 @@ public class SettingsActivity extends PreferenceActivity {
 		getBaseContext().startService(accelerometerIntent);
 		
 		this.addPreferencesFromResource(R.xml.preferences);
+		((EditTextPreference) this.getPreferenceScreen().getPreference(0)).getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
 	}
 
 }
