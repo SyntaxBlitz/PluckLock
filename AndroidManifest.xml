@@ -1,0 +1,41 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="net.syntaxblitz.plucklock" android:versionCode="1"
+	android:versionName="1.0">
+
+	<uses-sdk android:minSdkVersion="9" android:targetSdkVersion="15" />
+
+	<application android:label="@string/app_name" android:icon="@drawable/ic_launcher"
+		android:theme="@style/AppTheme">
+		<activity android:name=".SettingsActivity"
+			android:launchMode="standard"
+			android:theme="@android:style/Theme"
+			android:label="PluckLock">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			</activity>
+		<receiver android:name=".AutostartReceiver">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+			</intent-filter>
+		</receiver>
+		<service android:enabled="true" android:name=".AccelerometerService" />
+		
+		<receiver
+		    android:name=".AdminReceiver"
+		    android:permission="android.permission.BIND_DEVICE_ADMIN">
+		    <meta-data
+		        android:name="android.app.device_admin"
+		        android:resource="@xml/admin" />
+		    <intent-filter>
+		        <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
+		    </intent-filter>
+		</receiver>
+		
+		
+		<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
+		<uses-permission android:name="android.permission.USES_POLICY_FORCE_LOCK"></uses-permission>
+	</application>
+
+</manifest>

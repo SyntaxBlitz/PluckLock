@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PluckLock</string>
+    <string name="prefs_threshold">Threshold</string>
+</resources>
