@@ -29,7 +29,7 @@ public class AccelerometerService extends Service {
 				"Started service, threshold=");
 
 		sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-		sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
 		sensorManager.registerListener(new SensorEventListener() {
 			@Override
