@@ -26,9 +26,6 @@ public class AccelerometerService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startid) {
-		Log.i("PluckLock",
-				"Started service, threshold=");
-
 		sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 

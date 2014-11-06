@@ -11,7 +11,6 @@ public class AutostartReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent i) {
 		Intent accelerometerIntent = new Intent(context, AccelerometerService.class);
 		context.startService(accelerometerIntent);
-		Log.i("PluckLock", "started service from autostart");
 	}
 
 }
