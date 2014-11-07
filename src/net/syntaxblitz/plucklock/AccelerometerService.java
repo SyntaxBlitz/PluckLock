@@ -52,15 +52,6 @@ public class AccelerometerService extends Service {
 			}
 		}, sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-		/*
-		 * runningThread = new Thread(new Runnable() {
-		 * 
-		 * @Override public void run() { while
-		 * (!Thread.currentThread().isInterrupted()) { if () } } });
-		 */
-
-		//runningThread.start();
-
 		return START_STICKY;
 	}
 
