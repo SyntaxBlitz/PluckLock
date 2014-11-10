@@ -15,7 +15,6 @@ import android.util.Log;
 
 public class AccelerometerService extends Service {
 
-	private Thread runningThread;
 	private SensorManager sensorManager;
 	private Sensor sensor;
 
@@ -53,11 +52,6 @@ public class AccelerometerService extends Service {
 		}, sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
 		return START_STICKY;
-	}
-
-	@Override
-	public void onDestroy() {
-		runningThread.interrupt();
 	}
 
 }
