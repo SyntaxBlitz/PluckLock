@@ -15,7 +15,6 @@ import android.util.Log;
 
 public class AccelerometerService extends Service {
 
-	private Thread runningThread;
 	private SensorManager sensorManager;
 	private Sensor sensor;
 
@@ -52,21 +51,7 @@ public class AccelerometerService extends Service {
 			}
 		}, sensor, SensorManager.SENSOR_DELAY_GAME);
 
-		/*
-		 * runningThread = new Thread(new Runnable() {
-		 * 
-		 * @Override public void run() { while
-		 * (!Thread.currentThread().isInterrupted()) { if () } } });
-		 */
-
-		//runningThread.start();
-
 		return START_STICKY;
-	}
-
-	@Override
-	public void onDestroy() {
-		runningThread.interrupt();
 	}
 
 }
