@@ -2,11 +2,16 @@ package net.syntaxblitz.plucklock;
 
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.text.InputType;
+import android.view.View;
+import android.view.View.OnFocusChangeListener;
+import android.widget.Toast;
 
 public class SettingsActivity extends PreferenceActivity {
 
@@ -32,7 +37,17 @@ public class SettingsActivity extends PreferenceActivity {
 		getBaseContext().startService(accelerometerIntent);
 		
 		this.addPreferencesFromResource(R.xml.preferences);
-		((EditTextPreference) this.getPreferenceScreen().getPreference(0)).getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		
+		EditTextPreference pref = ((EditTextPreference) this.getPreferenceScreen().getPreference(0));
+		pref.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
+		pref.getEditText().setOnFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View arg0, boolean arg1) {
+				Toast.makeText(getBaseContext(), R.string.prefs_threshold_description, 8).show();
+			}
+			
+		});
 	}
 
 }

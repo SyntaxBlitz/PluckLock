@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PluckLock</string>
     <string name="prefs_threshold">Threshold</string>
+    <string name="prefs_threshold_description">A value, in terms of g (9.81 m/s^2), that the sum of all non-gravitational forces on the phone must exceed for it to lock.</string>
 </resources>
