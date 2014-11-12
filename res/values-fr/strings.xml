@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PluckLock</string>
+    <string name="prefs_threshold">Seuil</string>
+    <string name="prefs_threshold_description">Un multiple de 9,81 m/s^2 que la somme de toutes les forces non-gravitationnelles sur l\'appareil doit dépasser pour le verrouiller.</string>
+</resources>
