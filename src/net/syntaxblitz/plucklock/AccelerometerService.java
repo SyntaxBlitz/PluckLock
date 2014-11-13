@@ -49,7 +49,7 @@ public class AccelerometerService extends Service {
 					}
 				}
 			}
-		}, sensor, SensorManager.SENSOR_DELAY_GAME);
+		}, sensor, SensorManager.SENSOR_DELAY_UI);
 
 		return START_STICKY;
 	}
