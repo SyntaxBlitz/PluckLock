@@ -35,8 +35,6 @@ public class AccelerometerService extends Service {
 		sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 		activeListener = new SensorEventListener() {
-			private double threshold = -1;
-			
 			@Override
 			public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
@@ -47,8 +45,7 @@ public class AccelerometerService extends Service {
 				if (AccelerometerService.dead)
 					return;
 				
-				if (threshold == -1)
-					threshold = Double.valueOf(PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString("threshold_pref_key", "1"));
+				double threshold = Double.valueOf(PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString("threshold_pref_key", "1"));
 				double x = Math.abs(event.values[0] / 9.81);
 				double y = Math.abs(event.values[1] / 9.81);
 				double z = Math.abs(event.values[2] / 9.81);
