@@ -3,6 +3,7 @@ package net.syntaxblitz.plucklock;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.os.Bundle;
