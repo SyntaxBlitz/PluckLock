@@ -61,7 +61,7 @@ public class AccelerometerService extends Service {
 			}
 		};
 
-		sensorManager.registerListener(activeListener, sensor, SensorManager.SENSOR_DELAY_GAME);
+		sensorManager.registerListener(activeListener, sensor, SensorManager.SENSOR_DELAY_UI);
 
 		return START_STICKY;
 	}
