@@ -1,25 +1,26 @@
 package net.syntaxblitz.plucklock;
 
+import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
-import android.content.DialogInterface;
-import android.content.IntentFilter;
-import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.PreferenceActivity;
-import android.text.InputType;
-import android.view.View;
-import android.view.View.OnFocusChangeListener;
+import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 import android.widget.Toast;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends Activity {
 
+	private SharedPreferences prefs;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		setContentView(R.layout.settingsactivity);
+
 		// API < 10
 		setTheme(android.R.style.Theme);
 		// API > 11
@@ -33,22 +34,43 @@ public class SettingsActivity extends PreferenceActivity {
 		Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
 		intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
 		startActivity(intent);
-		
-		Intent accelerometerIntent = new Intent(getBaseContext(), AccelerometerService.class);
+
+		Intent accelerometerIntent = new Intent(getBaseContext(),
+				AccelerometerService.class);
 		getBaseContext().startService(accelerometerIntent);
 		
-		this.addPreferencesFromResource(R.xml.preferences);
-		
-		EditTextPreference pref = ((EditTextPreference) this.getPreferenceScreen().getPreference(0));
-		pref.getEditText().setInputType(InputType.TYPE_CLASS_PHONE);
-		pref.getEditText().setOnFocusChangeListener(new OnFocusChangeListener() {
+		this.prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
+		final EditText thresholdEdit = (EditText) this
+				.findViewById(R.id.pref_threshold_edit);
+		thresholdEdit.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void afterTextChanged(Editable arg0) {
+			}
 
 			@Override
-			public void onFocusChange(View arg0, boolean arg1) {
-				Toast.makeText(getBaseContext(), R.string.prefs_threshold_description, 8).show();
+			public void beforeTextChanged(CharSequence arg0, int arg1,
+					int arg2, int arg3) {
 			}
-			
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				try {
+					float newVal = Float.valueOf(s.toString());
+					if (newVal < .15) { 
+						thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+						Toast.makeText(getBaseContext(), getResources().getString(R.string.too_low), 2).show();
+					} else {
+						thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.white));
+						SharedPreferences.Editor editor = prefs.edit();
+						editor.putFloat("threshold_pref_key", newVal);
+						editor.commit();
+					}
+				} catch (NumberFormatException e) {
+					thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+				}
+			}
 		});
 	}
-
 }
