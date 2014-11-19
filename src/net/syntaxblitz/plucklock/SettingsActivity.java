@@ -60,7 +60,7 @@ public class SettingsActivity extends Activity {
 					float newVal = Float.valueOf(s.toString());
 					if (newVal < .15) { 
 						thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
-						Toast.makeText(getBaseContext(), getResources().getString(R.string.too_low), 2).show();
+						Toast.makeText(getBaseContext(), getResources().getString(R.string.too_low), Toast.LENGTH_SHORT).show();
 					} else {
 						thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.white));
 						SharedPreferences.Editor editor = prefs.edit();

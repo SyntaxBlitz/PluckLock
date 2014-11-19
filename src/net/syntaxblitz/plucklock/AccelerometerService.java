@@ -51,6 +51,10 @@ public class AccelerometerService extends Service {
 				
 				try {
 					threshold = prefs.getFloat("threshold_pref_key", 1);
+					if (threshold < .15) {	// only possible pre-update.
+						threshold = 1;
+						prefs.edit().putFloat("threshold_pref_key", threshold).commit();
+					}
 				} catch (ClassCastException e) {
 					// The user has a non-float in the settings! Probably because they're migrating from an old version of the app.
 					String thresholdStr = prefs.getString("threshold_pref_key", "1");
