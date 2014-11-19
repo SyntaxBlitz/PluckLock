@@ -6,6 +6,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -45,13 +46,27 @@ public class AccelerometerService extends Service {
 				if (AccelerometerService.dead)
 					return;
 				
-				double threshold = Double.valueOf(PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString("threshold_pref_key", "1"));
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+				float threshold;
+				
+				try {
+					threshold = prefs.getFloat("threshold_pref_key", 1);
+					if (threshold < .15) {	// only possible pre-update.
+						threshold = 1;
+						prefs.edit().putFloat("threshold_pref_key", threshold).commit();
+					}
+				} catch (ClassCastException e) {
+					// The user has a non-float in the settings! Probably because they're migrating from an old version of the app.
+					String thresholdStr = prefs.getString("threshold_pref_key", "1");
+					threshold = Float.valueOf(thresholdStr);
+					prefs.edit().putFloat("threshold_pref_key", threshold).commit();
+				}
 				double x = Math.abs(event.values[0] / 9.81);
 				double y = Math.abs(event.values[1] / 9.81);
 				double z = Math.abs(event.values[2] / 9.81);
 				double sum = x + y + z;
 				Log.i("PluckLock", "" + sum);
-				if (sum > threshold && threshold > .15) {
+				if (sum > threshold) {
 					KeyguardManager keyguardManager = (KeyguardManager) getBaseContext().getSystemService(Context.KEYGUARD_SERVICE);
 					if (!keyguardManager.inKeyguardRestrictedInputMode()) {
 						DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
