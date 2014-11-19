@@ -43,6 +43,7 @@ public class SettingsActivity extends Activity {
 
 		final EditText thresholdEdit = (EditText) this
 				.findViewById(R.id.pref_threshold_edit);
+		thresholdEdit.setText("" + prefs.getFloat("threshold_pref_key", 1));
 		thresholdEdit.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable arg0) {
