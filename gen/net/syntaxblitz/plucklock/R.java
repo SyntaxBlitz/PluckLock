@@ -25,6 +25,7 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f050000;
+        public static final int failed_to_lock=0x7f050006;
         public static final int prefs_enable_device_admin=0x7f050003;
         public static final int prefs_enable_device_admin_description=0x7f050004;
         public static final int prefs_threshold=0x7f050001;

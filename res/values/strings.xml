@@ -5,4 +5,5 @@
     <string name="prefs_enable_device_admin">Enable Device Admin</string>
     <string name="prefs_enable_device_admin_description">Must be checked for app to function. Uncheck this before uninstalling.</string>
     <string name="too_low">That threshold is too low. Trust me.</string>
+    <string name="failed_to_lock">PluckLock was about to lock your phone, but device admin is disabled. Enable it in the settings.</string>
 </resources>
