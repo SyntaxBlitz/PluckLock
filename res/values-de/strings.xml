@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PluckLock</string>
+    <string name="prefs_threshold">Schwelle</string>
+    <string name="prefs_threshold_description">Ein in der Beschleunigungskraft (9.81 m/s^2) ausgedrückter Wert, den die Summe aller nicht-gravitationalen Kräfte, die auf das Gerät wirken, überschreiten muss, damit das Gerät gesperrt wird.</string>
+    <string name="prefs_enable_device_admin">Füge PluckLock zu den Geräteadministratoren hinzu</string>
+    <string name="prefs_enable_device_admin_description">Notwendig, damit die Anwendung funktioniert. Vor der Deinstallation muss dieser Haken deaktiviert sein.</string>
+    <string name="too_low">Diese Schwelle ist zu niedrig, vertrauen Sie mir.</string>
+    <string name="failed_to_lock">PluckLock wollte Ihr Gerät sperren, aber der Vorgang schlug fehl, weil PluckLock dazu Geräteadministrator sein muss. Bitte fügen Sie PluckLock über die Einstellungen zu den Geräteadministratoren hinzu.</string>
+</resources>
