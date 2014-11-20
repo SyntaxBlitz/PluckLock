@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="net.syntaxblitz.plucklock" android:versionCode="3"
-	android:versionName="1.0.2" android:installLocation="internalOnly">
+	package="net.syntaxblitz.plucklock" android:versionCode="4"
+	android:versionName="1.0.3" android:installLocation="internalOnly">
 
 	<uses-sdk android:minSdkVersion="9" android:targetSdkVersion="15" />
 
