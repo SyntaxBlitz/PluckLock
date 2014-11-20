@@ -3,12 +3,16 @@ package net.syntaxblitz.plucklock;
 import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -28,18 +32,12 @@ public class SettingsActivity extends Activity {
 		// API > 14
 		setTheme(android.R.style.Theme_DeviceDefault);
 
-		ComponentName adminComponent = new ComponentName(this,
-				AdminReceiver.class);
-
-		Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-		intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
-		startActivity(intent);
-
 		Intent accelerometerIntent = new Intent(getBaseContext(),
 				AccelerometerService.class);
 		getBaseContext().startService(accelerometerIntent);
 		
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		final SharedPreferences.Editor editor = prefs.edit();
 
 		final EditText thresholdEdit = (EditText) this
 				.findViewById(R.id.pref_threshold_edit);
@@ -64,12 +62,38 @@ public class SettingsActivity extends Activity {
 						Toast.makeText(getBaseContext(), getResources().getString(R.string.too_low), Toast.LENGTH_SHORT).show();
 					} else {
 						thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.white));
-						SharedPreferences.Editor editor = prefs.edit();
 						editor.putFloat("threshold_pref_key", newVal);
 						editor.commit();
 					}
 				} catch (NumberFormatException e) {
 					thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+				}
+			}
+		});
+		
+		final ComponentName adminComponent = new ComponentName(this,
+				AdminReceiver.class);
+
+		if (!prefs.getBoolean("has_disabled_device_admin", false)) {	// user has never unchecked it, ever 
+			Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+			intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
+			startActivity(intent);
+		}
+		
+		final DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+		final CheckBox deviceManagerCheck = (CheckBox) findViewById(R.id.checkBox1);
+		deviceManagerCheck.setChecked(dpm.isAdminActive(adminComponent));
+		
+		deviceManagerCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton button, boolean isChecked) {
+				if (isChecked) {	// we're not here to be DRY like those ruby freaks
+					Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+					intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
+					startActivity(intent);
+				} else {
+					editor.putBoolean("has_disabled_device_admin", true).commit();
+					dpm.removeActiveAdmin(adminComponent);
 				}
 			}
 		});

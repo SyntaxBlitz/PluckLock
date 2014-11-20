@@ -3,6 +3,7 @@ package net.syntaxblitz.plucklock;
 import android.app.KeyguardManager;
 import android.app.Service;
 import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -14,6 +15,7 @@ import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 public class AccelerometerService extends Service {
 	public static boolean dead = false;
@@ -70,7 +72,10 @@ public class AccelerometerService extends Service {
 					KeyguardManager keyguardManager = (KeyguardManager) getBaseContext().getSystemService(Context.KEYGUARD_SERVICE);
 					if (!keyguardManager.inKeyguardRestrictedInputMode()) {
 						DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-						dpm.lockNow();
+						if (dpm.isAdminActive(new ComponentName(getBaseContext(), AdminReceiver.class)))
+							dpm.lockNow();
+						else
+							Toast.makeText(getBaseContext(), getResources().getString(R.string.failed_to_lock), Toast.LENGTH_SHORT).show();
 					}
 				}
 			}
