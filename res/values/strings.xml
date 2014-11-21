@@ -3,7 +3,7 @@
     <string name="prefs_enabled">Enable PluckLock</string>
     <string name="prefs_threshold">Threshold</string>
     <string name="prefs_threshold_description">A value, in terms of g (9.81 m/s^2), that the sum of all non-gravitational forces on the phone must exceed for it to lock.</string>
-    <string name="prefs_enable_device_admin">Add PluckLock to device admininstrators</string>
+    <string name="prefs_enable_device_admin">Add PluckLock to device administrators</string>
     <string name="prefs_enable_device_admin_description">Must be checked for app to function. Uncheck this before uninstalling.</string>
     <string name="too_low">That threshold is too low. Trust me.</string>
 </resources>
