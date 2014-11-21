@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">PluckLock</string>
-    <string name="prefs_enable">Ermächtigen PluckLock</string> <!-- TODO: UNCHECKED -->
+    <string name="prefs_enabled">Ermächtigen PluckLock</string> <!-- TODO: UNCHECKED -->
     <string name="prefs_threshold">Schwelle</string>
     <string name="prefs_threshold_description">Ein in der Beschleunigungskraft (9.81 m/s^2) ausgedrückter Wert, den die Summe aller nicht-gravitationalen Kräfte, die auf das Gerät wirken, überschreiten muss, damit das Gerät gesperrt wird.</string>
     <string name="prefs_enable_device_admin">Füge PluckLock zu den Geräteadministratoren hinzu</string>
