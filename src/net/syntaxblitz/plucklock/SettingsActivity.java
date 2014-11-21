@@ -35,7 +35,7 @@ public class SettingsActivity extends Activity {
 
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		
-		CheckBox enabledCheck = (CheckBox) findViewById(R.id.checkBox2);
+		final CheckBox enabledCheck = (CheckBox) findViewById(R.id.checkBox2);
 		
 		enabledCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
@@ -101,7 +101,6 @@ public class SettingsActivity extends Activity {
 		
 		final DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
 		final CheckBox deviceManagerCheck = (CheckBox) findViewById(R.id.checkBox1);
-		deviceManagerCheck.setChecked(dpm.isAdminActive(adminComponent));
 		
 		deviceManagerCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
@@ -110,12 +109,17 @@ public class SettingsActivity extends Activity {
 					Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
 					intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
 					startActivity(intent);
+					enabledCheck.setEnabled(true);
 				} else {
 					SharedPreferences.Editor editor = prefs.edit();
 					editor.putBoolean("has_disabled_device_admin", true).commit();
 					dpm.removeActiveAdmin(adminComponent);
+					enabledCheck.setChecked(false);
+					enabledCheck.setEnabled(false);
 				}
 			}
 		});
+		
+		deviceManagerCheck.setChecked(dpm.isAdminActive(adminComponent));
 	}
 }

@@ -74,8 +74,6 @@ public class AccelerometerService extends Service {
 						DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
 						if (dpm.isAdminActive(new ComponentName(getBaseContext(), AdminReceiver.class)))
 							dpm.lockNow();
-						else
-							Toast.makeText(getBaseContext(), getResources().getString(R.string.failed_to_lock), Toast.LENGTH_SHORT).show();
 					}
 				}
 			}
