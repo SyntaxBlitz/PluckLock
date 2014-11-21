@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -32,13 +33,30 @@ public class SettingsActivity extends Activity {
 		// API > 14
 		setTheme(android.R.style.Theme_DeviceDefault);
 
-		Intent accelerometerIntent = new Intent(getBaseContext(),
-				AccelerometerService.class);
-		getBaseContext().startService(accelerometerIntent);
-		
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-		final SharedPreferences.Editor editor = prefs.edit();
-
+		
+		CheckBox enabledCheck = (CheckBox) findViewById(R.id.checkBox2);
+		
+		enabledCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton button, boolean checked) {
+				Intent accelerometerIntent = new Intent(getBaseContext(),
+						AccelerometerService.class);
+				if (checked) {
+					AccelerometerService.dead = false;
+					getBaseContext().startService(accelerometerIntent);
+				} else {
+					AccelerometerService.dead = true;
+					getBaseContext().stopService(accelerometerIntent);
+				}
+				
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putBoolean("plucklock_enabled", checked).commit();
+			}
+		});
+		
+		enabledCheck.setChecked(this.prefs.getBoolean("plucklock_enabled", true));	// this triggers the listener, which will start the Service.
+		
 		final EditText thresholdEdit = (EditText) this
 				.findViewById(R.id.pref_threshold_edit);
 		thresholdEdit.setText("" + prefs.getFloat("threshold_pref_key", 1));
@@ -61,6 +79,7 @@ public class SettingsActivity extends Activity {
 						thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
 						Toast.makeText(getBaseContext(), getResources().getString(R.string.too_low), Toast.LENGTH_SHORT).show();
 					} else {
+						SharedPreferences.Editor editor = prefs.edit();
 						thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.white));
 						editor.putFloat("threshold_pref_key", newVal);
 						editor.commit();
@@ -92,6 +111,7 @@ public class SettingsActivity extends Activity {
 					intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
 					startActivity(intent);
 				} else {
+					SharedPreferences.Editor editor = prefs.edit();
 					editor.putBoolean("has_disabled_device_admin", true).commit();
 					dpm.removeActiveAdmin(adminComponent);
 				}
