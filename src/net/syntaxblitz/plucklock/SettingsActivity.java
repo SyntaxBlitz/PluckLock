@@ -35,9 +35,9 @@ public class SettingsActivity extends Activity {
 
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		
-		enabledCheck = (CheckBox) findViewById(R.id.checkBox2);
-		deviceAdminCheck = (CheckBox) findViewById(R.id.checkBox1);
-		thresholdEdit = (EditText) findViewById(R.id.pref_threshold_edit);
+		enabledCheck = (CheckBox) findViewById(R.id.enabled);
+		deviceAdminCheck = (CheckBox) findViewById(R.id.enable_device_admin);
+		thresholdEdit = (EditText) findViewById(R.id.threshold_edit);
 		
 		enabledCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
