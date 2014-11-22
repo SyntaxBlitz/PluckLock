@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -21,21 +20,24 @@ public class SettingsActivity extends Activity {
 
 	private SharedPreferences prefs;
 	
+	private CheckBox enabledCheck;
+	private CheckBox deviceAdminCheck;
+	private EditText thresholdEdit;
+	
+	private static double MIN_THRESHOLD = .15;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settingsactivity);
 
-		// API < 10
-		setTheme(android.R.style.Theme);
-		// API > 11
-		setTheme(android.R.style.Theme_Holo);
-		// API > 14
-		setTheme(android.R.style.Theme_DeviceDefault);
+		setThemes();
 
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		
-		final CheckBox enabledCheck = (CheckBox) findViewById(R.id.checkBox2);
+		enabledCheck = (CheckBox) findViewById(R.id.checkBox2);
+		deviceAdminCheck = (CheckBox) findViewById(R.id.checkBox1);
+		thresholdEdit = (EditText) findViewById(R.id.pref_threshold_edit);
 		
 		enabledCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
@@ -51,15 +53,13 @@ public class SettingsActivity extends Activity {
 				}
 				
 				SharedPreferences.Editor editor = prefs.edit();
-				editor.putBoolean("plucklock_enabled", checked).commit();
+				editor.putBoolean(PreferenceString.ENABLED, checked).commit();
 			}
 		});
 		
-		enabledCheck.setChecked(this.prefs.getBoolean("plucklock_enabled", true));	// this triggers the listener, which will start the Service.
+		enabledCheck.setChecked(this.prefs.getBoolean(PreferenceString.ENABLED, true));	// this triggers the listener, which will start the Service.
 		
-		final EditText thresholdEdit = (EditText) this
-				.findViewById(R.id.pref_threshold_edit);
-		thresholdEdit.setText("" + prefs.getFloat("threshold_pref_key", 1));
+		thresholdEdit.setText("" + prefs.getFloat(PreferenceString.THRESHOLD, 1));
 		thresholdEdit.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable arg0) {
@@ -75,13 +75,13 @@ public class SettingsActivity extends Activity {
 					int count) {
 				try {
 					float newVal = Float.valueOf(s.toString());
-					if (newVal < .15) { 
+					if (newVal < MIN_THRESHOLD) { 
 						thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
 						Toast.makeText(getBaseContext(), getResources().getString(R.string.too_low), Toast.LENGTH_SHORT).show();
 					} else {
 						SharedPreferences.Editor editor = prefs.edit();
 						thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.white));
-						editor.putFloat("threshold_pref_key", newVal);
+						editor.putFloat(PreferenceString.THRESHOLD, newVal);
 						editor.commit();
 					}
 				} catch (NumberFormatException e) {
@@ -93,16 +93,15 @@ public class SettingsActivity extends Activity {
 		final ComponentName adminComponent = new ComponentName(this,
 				AdminReceiver.class);
 
-		if (!prefs.getBoolean("has_disabled_device_admin", false)) {	// user has never unchecked it, ever 
+		if (!prefs.getBoolean(PreferenceString.DISABLED_DEVICE_ADMIN, false)) {	// user has never unchecked it, ever 
 			Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
 			intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
 			startActivity(intent);
 		}
 		
 		final DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-		final CheckBox deviceManagerCheck = (CheckBox) findViewById(R.id.checkBox1);
 		
-		deviceManagerCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		deviceAdminCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton button, boolean isChecked) {
 				if (isChecked) {	// we're not here to be DRY like those ruby freaks
@@ -112,7 +111,7 @@ public class SettingsActivity extends Activity {
 					enabledCheck.setEnabled(true);
 				} else {
 					SharedPreferences.Editor editor = prefs.edit();
-					editor.putBoolean("has_disabled_device_admin", true).commit();
+					editor.putBoolean(PreferenceString.DISABLED_DEVICE_ADMIN, true).commit();
 					dpm.removeActiveAdmin(adminComponent);
 					enabledCheck.setChecked(false);
 					enabledCheck.setEnabled(false);
@@ -120,6 +119,15 @@ public class SettingsActivity extends Activity {
 			}
 		});
 		
-		deviceManagerCheck.setChecked(dpm.isAdminActive(adminComponent));
+		deviceAdminCheck.setChecked(dpm.isAdminActive(adminComponent));
+	}
+	
+	private void setThemes() {
+		// API < 10
+		setTheme(android.R.style.Theme);
+		// API > 11
+		setTheme(android.R.style.Theme_Holo);
+		// API > 14
+		setTheme(android.R.style.Theme_DeviceDefault);
 	}
 }

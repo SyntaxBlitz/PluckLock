@@ -15,7 +15,6 @@ import android.hardware.SensorManager;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 
 public class AccelerometerService extends Service {
 	public static boolean dead = false;
