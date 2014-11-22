@@ -94,9 +94,7 @@ public class SettingsActivity extends Activity {
 				AdminReceiver.class);
 
 		if (!prefs.getBoolean(PreferenceString.DISABLED_DEVICE_ADMIN, false)) {	// user has never unchecked it, ever 
-			Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-			intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
-			startActivity(intent);
+			requestDeviceAdmin(adminComponent);
 		}
 		
 		final DevicePolicyManager dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
@@ -104,10 +102,8 @@ public class SettingsActivity extends Activity {
 		deviceAdminCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton button, boolean isChecked) {
-				if (isChecked) {	// we're not here to be DRY like those ruby freaks
-					Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-					intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
-					startActivity(intent);
+				if (isChecked) {
+					requestDeviceAdmin(adminComponent);
 					enabledCheck.setEnabled(true);
 				} else {
 					SharedPreferences.Editor editor = prefs.edit();
@@ -129,5 +125,11 @@ public class SettingsActivity extends Activity {
 		setTheme(android.R.style.Theme_Holo);
 		// API > 14
 		setTheme(android.R.style.Theme_DeviceDefault);
+	}
+	
+	private void requestDeviceAdmin(ComponentName adminComponent) {
+		Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+		intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
+		startActivity(intent);
 	}
 }
