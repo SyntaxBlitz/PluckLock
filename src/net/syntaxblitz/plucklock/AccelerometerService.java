@@ -52,8 +52,8 @@ public class AccelerometerService extends Service {
 				
 				try {
 					threshold = prefs.getFloat("threshold_pref_key", 1);
-					if (threshold < .15) {	// only possible pre-update.
-						threshold = 1;
+					if (threshold < SettingsActivity.MIN_THRESHOLD) {	// only possible pre-update.
+						threshold = SettingsActivity.DEFAULT_THRESHOLD;
 						prefs.edit().putFloat("threshold_pref_key", threshold).commit();
 					}
 				} catch (ClassCastException e) {
@@ -62,9 +62,9 @@ public class AccelerometerService extends Service {
 					threshold = Float.valueOf(thresholdStr);
 					prefs.edit().putFloat("threshold_pref_key", threshold).commit();
 				}
-				double x = Math.abs(event.values[0] / 9.81);
-				double y = Math.abs(event.values[1] / 9.81);
-				double z = Math.abs(event.values[2] / 9.81);
+				double x = Math.abs(event.values[0]);
+				double y = Math.abs(event.values[1]);
+				double z = Math.abs(event.values[2]);
 				double sum = x + y + z;
 				Log.i("PluckLock", "" + sum);
 				if (sum > threshold) {

@@ -24,7 +24,8 @@ public class SettingsActivity extends Activity {
 	private CheckBox deviceAdminCheck;
 	private EditText thresholdEdit;
 	
-	private static double MIN_THRESHOLD = .15;
+	public static float MIN_THRESHOLD = 1.5f;
+	public static float DEFAULT_THRESHOLD = 10f;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,12 @@ public class SettingsActivity extends Activity {
 		
 		enabledCheck.setChecked(this.prefs.getBoolean(PreferenceString.ENABLED, true));	// this triggers the listener, which will start the Service.
 		
-		thresholdEdit.setText("" + prefs.getFloat(PreferenceString.THRESHOLD, 1));
+		float currentThreshold = prefs.getFloat(PreferenceString.THRESHOLD, DEFAULT_THRESHOLD);
+		if (currentThreshold < MIN_THRESHOLD) {
+			currentThreshold = (float) MIN_THRESHOLD;
+			prefs.edit().putFloat(PreferenceString.THRESHOLD, currentThreshold);
+		}
+		thresholdEdit.setText("" + currentThreshold);
 		thresholdEdit.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable arg0) {
