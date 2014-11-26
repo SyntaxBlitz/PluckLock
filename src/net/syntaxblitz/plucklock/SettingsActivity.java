@@ -82,16 +82,16 @@ public class SettingsActivity extends Activity {
 				try {
 					float newVal = Float.valueOf(s.toString());
 					if (newVal < MIN_THRESHOLD) { 
-						thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+						thresholdEdit.setBackgroundColor(getResources().getColor(R.color.red));
 						Toast.makeText(getBaseContext(), getResources().getString(R.string.too_low), Toast.LENGTH_SHORT).show();
 					} else {
 						SharedPreferences.Editor editor = prefs.edit();
-						thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.white));
+						thresholdEdit.setBackgroundColor(getResources().getColor(R.color.white));
 						editor.putFloat(PreferenceString.THRESHOLD, newVal);
 						editor.commit();
 					}
 				} catch (NumberFormatException e) {
-					thresholdEdit.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+					thresholdEdit.setBackgroundColor(getResources().getColor(R.color.red));
 				}
 			}
 		});
