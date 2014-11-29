@@ -7,4 +7,6 @@ This pings the accelerometer in the background and will lock the phone if the su
 
 Licensed under the MIT License by Timothy Aveni!
 
+German translations available thanks to [Daniel Kulesz](https://github.com/kuleszdl).
+
 Available on [Google Play](https://play.google.com/store/apps/details?id=net.syntaxblitz.plucklock).
