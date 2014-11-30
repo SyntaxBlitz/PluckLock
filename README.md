@@ -9,4 +9,4 @@ Licensed under the MIT License by Timothy Aveni!
 
 German translations available thanks to [Daniel Kulesz](https://github.com/kuleszdl).
 
-Available on [Google Play](https://play.google.com/store/apps/details?id=net.syntaxblitz.plucklock).
+Available on [Google Play](https://play.google.com/store/apps/details?id=net.syntaxblitz.plucklock) and [F-Droid](https://f-droid.org/repository/browse/?fdid=net.syntaxblitz.plucklock).
