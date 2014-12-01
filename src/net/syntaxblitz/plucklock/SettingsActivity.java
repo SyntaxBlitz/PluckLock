@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -35,6 +36,8 @@ public class SettingsActivity extends Activity {
 		setThemes();
 
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		
+		processOldPrefs();
 		
 		enabledCheck = (CheckBox) findViewById(R.id.enabled);
 		deviceAdminCheck = (CheckBox) findViewById(R.id.enable_device_admin);
@@ -124,6 +127,22 @@ public class SettingsActivity extends Activity {
 		deviceAdminCheck.setChecked(dpm.isAdminActive(adminComponent));
 	}
 	
+	private void processOldPrefs() {
+		// Get the last version that the app was running. 5 is the last version that didn't keep track, so we set that as our version number.
+		int prefsVersion = prefs.getInt(PreferenceString.PREFS_VERSION, 5);
+		
+		if (prefsVersion < 6) {
+			// In version 6, we stopped measuring in terms of g and started using straight metres/second^2.
+			// Let's bump up the threshold by a factor of 10. This isn't exactly g, but it will provide more friendly values.
+			prefs.edit().putFloat(PreferenceString.THRESHOLD, prefs.getFloat(PreferenceString.THRESHOLD, DEFAULT_THRESHOLD) * 10).commit();
+		}
+		
+		try {
+			// update the pref version so that we know that everything is good.
+			prefs.edit().putInt(PreferenceString.PREFS_VERSION, getPackageManager().getPackageInfo(getPackageName(), 0).versionCode).commit();
+		} catch (NameNotFoundException e) {}	// if this ever happens I will eat many hats. 
+	}
+
 	private void setThemes() {
 		// API < 10
 		setTheme(android.R.style.Theme);
